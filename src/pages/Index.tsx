@@ -79,7 +79,7 @@ const Index = () => {
       <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader 
-            title="EventSphere Dashboard"
+            title="OEX Dashboard"
             description="Overview of your workshop management system"
           >
             <Button>Generate Report</Button>

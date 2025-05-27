@@ -91,7 +91,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">EventSphere</h2>
+            <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">OEX</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">Workshop Management</p>
           </div>
           
@@ -134,7 +134,7 @@ export default function Sidebar() {
           
           <div className="p-4 mt-auto">
             <div className="text-xs text-gray-500 dark:text-gray-400">
-              <p>EventSphere © 2025</p>
+              <p>SaranaTech © 2025</p>
               <p>Version 1.0.0</p>
             </div>
           </div>
