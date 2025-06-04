@@ -25,7 +25,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     title: "Dashboard",
-    href: "/",
+    href: "/home",
     icon: LayoutDashboard,
     color: "text-indigo-500"
   },
