@@ -31,6 +31,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useIsMobile } from "@/hooks/use-mobile";
 import React from "react";
+import supabase from "@/lib/supabase";
+
 // Form validation schema
 const eventFormSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters." }),
@@ -100,16 +102,23 @@ const AddEvent = () => {
   const onSubmit = async (values: EventFormValues) => {
     try {
       setIsSubmitting(true);
-      
-      // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would normally send data to your API
-      console.log("Event form data:", values);
-      
-      // Invalidate queries to refetch agenda data
+       const { error } = await supabase
+        .from("events")
+        .insert([
+          {
+          title: values.title,
+          date: values.date,
+          start_time: values.startTime,
+          end_time: values.endTime,
+          location: values.location,
+          description: values.description,
+          }
+        ]);
+
+      if (error) throw error;
+
       queryClient.invalidateQueries({ queryKey: ["agenda"] });
-      
+
       // Show success message
       toast({
         title: "Event Created",
@@ -128,7 +137,7 @@ const AddEvent = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  };      
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

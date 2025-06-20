@@ -19,64 +19,19 @@ const Login = () => {
   const navigate = useNavigate();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setError("");
-    
-    // if (!isValidEmail(email)) {
-    //   setError("Please enter a valid email address.");
-    //   return;
-    // }
-    
-    // if (!isValidPassword(password)) {
-    //   setError("Password must be at least 6 characters.");
-    //   return;
-    // }
+    setError("");
     
     const testUser = {
         username: "admin@gmail.com",
         password: "one23456",
     };
-
     if(email === testUser.username && password === testUser.password) {
       console.log("Logged in successfully!");
       navigate("/home");
     } else {
       setError("Invalid username or password.");
     }
-
-    // try {
-    //   const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    //   const user = userCredential.user;
-    //   console.log("Logged in user:", user);
-    //   navigate("/home");
-    // } catch (err: any) {
-    //   console.error(err);
-    //   if (err.code === "auth/user-not-found") {
-    //     setError("No user found with this email.");
-    //   } else if (err.code === "auth/wrong-password") {
-    //     setError("Incorrect password.");
-    //   } else {
-    //     setError("Failed to log in. Please try again.");
-    //   }
-    // }
   };
-  
-  const hardcodedUser = {
-    username: "admin@gmail.com",
-    password: "one23456",
-  };
-  // const handleGoogleLogin = async () => {
-  //   const provider = new GoogleAuthProvider();
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     const user = result.user;
-  //     console.log("Logged in with Google:", user);
-  //     navigate("/home");
-  //   } catch (err) {
-  //     console.error("Google sign-in error:", err);
-  //     setError("Google login failed. Try again.");
-  //   }
-  // };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -150,4 +105,3 @@ const Login = () => {
 };
 
 export default Login;
-
