@@ -21,7 +21,7 @@ const Agenda = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       const { data, error } = await supabase
-      .from("events")
+      .from("agendas")
       .select("*")
       .order("date", { ascending: true });
       
@@ -95,7 +95,7 @@ const Agenda = () => {
           title="Event Agenda"
           description="Real-time monitoring of workshop schedule"
         >
-          <Button className="gap-2" onClick={() => navigate("/add-event")}> <Plus className="h-4 w-4" /> Add Event </Button>
+          <Button className="gap-2" onClick={() => navigate("/add-agenda")}> <Plus className="h-4 w-4" /> Add Event </Button>
         </DashboardHeader>
 
         {/* Month Tabs */}

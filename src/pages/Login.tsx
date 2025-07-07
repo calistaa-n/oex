@@ -27,7 +27,7 @@ const Login = () => {
     };
     if(email === testUser.username && password === testUser.password) {
       console.log("Logged in successfully!");
-      navigate("/home");
+      navigate("/event");
     } else {
       setError("Invalid username or password.");
     }

@@ -66,7 +66,7 @@ const eventTypes = [
   { id: "feedback", name: "Feedback Session" },
 ];
 
-const AddEvent = () => {
+const AddAgenda = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -357,4 +357,4 @@ const AddEvent = () => {
   );
 };
 
-export default AddEvent;
+export default AddAgenda;
