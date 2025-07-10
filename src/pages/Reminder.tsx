@@ -1,23 +1,28 @@
-
 import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Bell, Clock, Send, Filter } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
 // Mock data for reminders
 const remindersData = [
@@ -28,7 +33,8 @@ const remindersData = [
     sendTime: "2025-05-01T08:00:00",
     status: "scheduled",
     recipients: 42,
-    message: "Your workshop 'React for Beginners' starts in 2 hours. Room A, 10:00 AM."
+    message:
+      "Your workshop 'React for Beginners' starts in 2 hours. Room A, 10:00 AM.",
   },
   {
     id: 2,
@@ -37,7 +43,8 @@ const remindersData = [
     sendTime: "2025-05-01T12:00:00",
     status: "scheduled",
     recipients: 30,
-    message: "Your workshop 'Advanced TypeScript' starts in 2 hours. Room B, 2:00 PM."
+    message:
+      "Your workshop 'Advanced TypeScript' starts in 2 hours. Room B, 2:00 PM.",
   },
   {
     id: 3,
@@ -46,7 +53,7 @@ const remindersData = [
     sendTime: "2025-05-01T11:30:00",
     status: "scheduled",
     recipients: 150,
-    message: "Lunch will be served in 30 minutes in the Main Hall."
+    message: "Lunch will be served in 30 minutes in the Main Hall.",
   },
   {
     id: 4,
@@ -55,7 +62,8 @@ const remindersData = [
     sendTime: "2025-05-02T07:00:00",
     status: "scheduled",
     recipients: 22,
-    message: "Your workshop 'UI/UX Workshop' starts in 2 hours. Room C, 9:00 AM."
+    message:
+      "Your workshop 'UI/UX Workshop' starts in 2 hours. Room C, 9:00 AM.",
   },
   {
     id: 5,
@@ -64,7 +72,7 @@ const remindersData = [
     sendTime: "2025-05-01T16:00:00",
     status: "scheduled",
     recipients: 72,
-    message: "Please take a moment to provide feedback on today's workshops."
+    message: "Please take a moment to provide feedback on today's workshops.",
   },
   {
     id: 6,
@@ -73,7 +81,8 @@ const remindersData = [
     sendTime: "2025-04-28T07:00:00",
     status: "sent",
     recipients: 150,
-    message: "Welcome to our workshop event! Here's what you need to know for today."
+    message:
+      "Welcome to our workshop event! Here's what you need to know for today.",
   },
   {
     id: 7,
@@ -82,8 +91,9 @@ const remindersData = [
     sendTime: "2025-04-28T17:00:00",
     status: "sent",
     recipients: 150,
-    message: "Thank you for joining us today! Here's a summary of Day 1 and what to expect tomorrow."
-  }
+    message:
+      "Thank you for joining us today! Here's a summary of Day 1 and what to expect tomorrow.",
+  },
 ];
 
 const reminderSettings = {
@@ -92,24 +102,27 @@ const reminderSettings = {
   channels: {
     email: true,
     push: true,
-    sms: false
-  }
+    sms: false,
+  },
 };
 
 const Reminder = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const isMobile = useIsMobile();
-  
+
   // Filter reminders based on status
-  const filteredReminders = statusFilter === "all" 
-    ? remindersData 
-    : remindersData.filter(reminder => reminder.status === statusFilter);
+  const filteredReminders =
+    statusFilter === "all"
+      ? remindersData
+      : remindersData.filter((reminder) => reminder.status === statusFilter);
 
   // Function to get status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "scheduled":
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Scheduled</Badge>;
+        return (
+          <Badge className="bg-blue-500 hover:bg-blue-600">Scheduled</Badge>
+        );
       case "sent":
         return <Badge className="bg-green-500 hover:bg-green-600">Sent</Badge>;
       case "failed":
@@ -122,15 +135,21 @@ const Reminder = () => {
   // Function to format date
   const formatDateTime = (dateTimeString: string) => {
     const date = new Date(dateTimeString);
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return (
+      date.toLocaleDateString() +
+      " " +
+      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    );
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="Reminder System"
             description="Automatic reminders for workshop participants"
           >
@@ -139,7 +158,7 @@ const Reminder = () => {
               New Reminder
             </Button>
           </DashboardHeader>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Reminder Metrics */}
             <Card>
@@ -151,7 +170,7 @@ const Reminder = () => {
                 <p className="text-sm text-gray-500">Scheduled to send</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Upcoming 24h</CardTitle>
@@ -161,7 +180,7 @@ const Reminder = () => {
                 <p className="text-sm text-gray-500">Scheduled reminders</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Settings</CardTitle>
@@ -169,16 +188,20 @@ const Reminder = () => {
               <CardContent className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Workshop Reminder</span>
-                  <span className="text-sm font-medium">{reminderSettings.workshopReminderTime} min before</span>
+                  <span className="text-sm font-medium">
+                    {reminderSettings.workshopReminderTime} min before
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Default Channel</span>
-                  <span className="text-sm font-medium capitalize">{reminderSettings.defaultChannel}</span>
+                  <span className="text-sm font-medium capitalize">
+                    {reminderSettings.defaultChannel}
+                  </span>
                 </div>
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Reminder Controls */}
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1">
@@ -202,7 +225,7 @@ const Reminder = () => {
               </Button>
             </div>
           </div>
-          
+
           {/* Reminders Table */}
           <div className="rounded-lg border bg-white dark:bg-gray-800 overflow-x-auto">
             <Table>
@@ -219,15 +242,21 @@ const Reminder = () => {
               <TableBody>
                 {filteredReminders.map((reminder) => (
                   <TableRow key={reminder.id}>
-                    <TableCell className="font-medium">{reminder.title}</TableCell>
-                    <TableCell className="capitalize">{reminder.type}</TableCell>
+                    <TableCell className="font-medium">
+                      {reminder.title}
+                    </TableCell>
+                    <TableCell className="capitalize">
+                      {reminder.type}
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 mr-2 text-gray-400" />
                         {formatDateTime(reminder.sendTime)}
                       </div>
                     </TableCell>
-                    <TableCell className="text-center">{reminder.recipients}</TableCell>
+                    <TableCell className="text-center">
+                      {reminder.recipients}
+                    </TableCell>
                     <TableCell className="text-center">
                       {getStatusBadge(reminder.status)}
                     </TableCell>
@@ -241,7 +270,7 @@ const Reminder = () => {
               </TableBody>
             </Table>
           </div>
-          
+
           {/* Channels */}
           <div className="mt-8">
             <h3 className="text-lg font-medium mb-4">Notification Channels</h3>

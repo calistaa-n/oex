@@ -1,16 +1,15 @@
-
-import { 
-  Users, 
-  MonitorSmartphone, 
-  Bell, 
-  CalendarDays, 
-  ShoppingBag 
+import {
+  Users,
+  MonitorSmartphone,
+  Bell,
+  CalendarDays,
+  ShoppingBag,
 } from "lucide-react";
-import Sidebar from "@/components/Sidebar";
-import DashboardCard from "@/components/DashboardCard";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
+import DashboardCard from "@/components/DashboardCard";
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -76,18 +75,20 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="OEX Dashboard"
             description="Overview of your workshop management system"
           >
             <Button>Generate Report</Button>
           </DashboardHeader>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {modules.map((module) => (
-              <DashboardCard 
+              <DashboardCard
                 key={module.title}
                 title={module.title}
                 description={module.description}

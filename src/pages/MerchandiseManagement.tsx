@@ -1,48 +1,42 @@
-
-import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
-} from 'recharts';
-import { 
-  ShoppingBag, 
-  QrCode, 
-  Plus, 
-  Search, 
+  Cell,
+} from "recharts";
+import { useState } from "react";
+import {
+  ShoppingBag,
+  QrCode,
+  Plus,
+  Search,
   Download,
   Check,
-  X
+  X,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
 // Mock data for merchandise
 const merchandiseData = [
@@ -52,7 +46,7 @@ const merchandiseData = [
     totalQuantity: 200,
     collectedQuantity: 85,
     size: "M",
-    color: "Blue"
+    color: "Blue",
   },
   {
     id: 2,
@@ -60,7 +54,7 @@ const merchandiseData = [
     totalQuantity: 150,
     collectedQuantity: 62,
     size: "L",
-    color: "Black"
+    color: "Black",
   },
   {
     id: 3,
@@ -68,7 +62,7 @@ const merchandiseData = [
     totalQuantity: 100,
     collectedQuantity: 43,
     size: "L",
-    color: "Gray"
+    color: "Gray",
   },
   {
     id: 4,
@@ -76,7 +70,7 @@ const merchandiseData = [
     totalQuantity: 300,
     collectedQuantity: 160,
     size: "One Size",
-    color: "Transparent"
+    color: "Transparent",
   },
   {
     id: 5,
@@ -84,7 +78,7 @@ const merchandiseData = [
     totalQuantity: 250,
     collectedQuantity: 122,
     size: "A5",
-    color: "White"
+    color: "White",
   },
   {
     id: 6,
@@ -92,8 +86,8 @@ const merchandiseData = [
     totalQuantity: 400,
     collectedQuantity: 210,
     size: "One Size",
-    color: "Mixed"
-  }
+    color: "Mixed",
+  },
 ];
 
 // Mock recent collections
@@ -104,7 +98,7 @@ const recentCollections = [
     participantId: "P12345",
     item: "T-Shirt (L, Black)",
     timestamp: "2025-04-28T14:35:21",
-    status: "collected"
+    status: "collected",
   },
   {
     id: "c2",
@@ -112,7 +106,7 @@ const recentCollections = [
     participantId: "P12346",
     item: "Hoodie (L, Gray)",
     timestamp: "2025-04-28T14:32:08",
-    status: "collected"
+    status: "collected",
   },
   {
     id: "c3",
@@ -120,7 +114,7 @@ const recentCollections = [
     participantId: "P12347",
     item: "Water Bottle",
     timestamp: "2025-04-28T14:28:45",
-    status: "collected"
+    status: "collected",
   },
   {
     id: "c4",
@@ -128,7 +122,7 @@ const recentCollections = [
     participantId: "P12348",
     item: "T-Shirt (M, Blue)",
     timestamp: "2025-04-28T14:25:15",
-    status: "collected"
+    status: "collected",
   },
   {
     id: "c5",
@@ -136,46 +130,59 @@ const recentCollections = [
     participantId: "P12349",
     item: "Notebook + Sticker Pack",
     timestamp: "2025-04-28T14:20:37",
-    status: "collected"
-  }
+    status: "collected",
+  },
 ];
 
 // Chart data
-const chartData = merchandiseData.map(item => ({
+const chartData = merchandiseData.map((item) => ({
   name: item.name,
   total: item.totalQuantity,
   collected: item.collectedQuantity,
-  remaining: item.totalQuantity - item.collectedQuantity
+  remaining: item.totalQuantity - item.collectedQuantity,
 }));
 
-const COLORS = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+const COLORS = [
+  "#6366F1",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+];
 
 const pieData = [
-  { name: 'Collected', value: 682 },
-  { name: 'Remaining', value: 718 },
+  { name: "Collected", value: 682 },
+  { name: "Remaining", value: 718 },
 ];
 
 const MerchandiseManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const isMobile = useIsMobile();
-  
+
   // Filter merchandise based on search term
-  const filteredMerchandise = merchandiseData.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.color.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMerchandise = merchandiseData.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.color.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Format timestamp
   const formatTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="Merchandise Management"
             description="Manage merchandise collection using QR codes"
           >
@@ -190,7 +197,7 @@ const MerchandiseManagement = () => {
               </Button>
             </div>
           </DashboardHeader>
-          
+
           {/* Merchandise Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card>
@@ -202,7 +209,7 @@ const MerchandiseManagement = () => {
                 <p className="text-sm text-gray-500">Across all categories</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Collected</CardTitle>
@@ -212,7 +219,7 @@ const MerchandiseManagement = () => {
                 <p className="text-sm text-gray-500">48.7% of total</p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Remaining</CardTitle>
@@ -223,14 +230,14 @@ const MerchandiseManagement = () => {
               </CardContent>
             </Card>
           </div>
-          
+
           <Tabs defaultValue="inventory" className="mb-8">
             <TabsList className="mb-6">
               <TabsTrigger value="inventory">Inventory</TabsTrigger>
               <TabsTrigger value="collections">Recent Collections</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="inventory">
               {/* Search */}
               <div className="flex justify-between items-center mb-6">
@@ -248,7 +255,7 @@ const MerchandiseManagement = () => {
                   Export
                 </Button>
               </div>
-              
+
               {/* Inventory Table */}
               <div className="rounded-lg border bg-white dark:bg-gray-800 overflow-x-auto">
                 <Table>
@@ -257,7 +264,9 @@ const MerchandiseManagement = () => {
                       <TableHead>Item Name</TableHead>
                       <TableHead>Size</TableHead>
                       <TableHead>Color</TableHead>
-                      <TableHead className="text-center">Total Quantity</TableHead>
+                      <TableHead className="text-center">
+                        Total Quantity
+                      </TableHead>
                       <TableHead className="text-center">Collected</TableHead>
                       <TableHead className="text-center">Remaining</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
@@ -266,14 +275,24 @@ const MerchandiseManagement = () => {
                   <TableBody>
                     {filteredMerchandise.map((item) => (
                       <TableRow key={item.id}>
-                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {item.name}
+                        </TableCell>
                         <TableCell>{item.size}</TableCell>
                         <TableCell>{item.color}</TableCell>
-                        <TableCell className="text-center">{item.totalQuantity}</TableCell>
-                        <TableCell className="text-center">{item.collectedQuantity}</TableCell>
-                        <TableCell className="text-center">{item.totalQuantity - item.collectedQuantity}</TableCell>
+                        <TableCell className="text-center">
+                          {item.totalQuantity}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {item.collectedQuantity}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {item.totalQuantity - item.collectedQuantity}
+                        </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">View</Button>
+                          <Button variant="ghost" size="sm">
+                            View
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -281,7 +300,7 @@ const MerchandiseManagement = () => {
                 </Table>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="collections">
               {/* Recent Collections Table */}
               <div className="bg-white dark:bg-gray-800 rounded-lg border overflow-hidden">
@@ -306,8 +325,12 @@ const MerchandiseManagement = () => {
                     <TableBody>
                       {recentCollections.map((collection) => (
                         <TableRow key={collection.id}>
-                          <TableCell>{formatTime(collection.timestamp)}</TableCell>
-                          <TableCell className="font-medium">{collection.participantName}</TableCell>
+                          <TableCell>
+                            {formatTime(collection.timestamp)}
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {collection.participantName}
+                          </TableCell>
                           <TableCell>{collection.participantId}</TableCell>
                           <TableCell>{collection.item}</TableCell>
                           <TableCell className="text-center">
@@ -330,7 +353,7 @@ const MerchandiseManagement = () => {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="analytics">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Distribution Chart */}
@@ -350,14 +373,22 @@ const MerchandiseManagement = () => {
                           <YAxis />
                           <Tooltip />
                           <Legend />
-                          <Bar dataKey="collected" name="Collected" fill="#10B981" />
-                          <Bar dataKey="remaining" name="Remaining" fill="#F59E0B" />
+                          <Bar
+                            dataKey="collected"
+                            name="Collected"
+                            fill="#10B981"
+                          />
+                          <Bar
+                            dataKey="remaining"
+                            name="Remaining"
+                            fill="#F59E0B"
+                          />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 {/* Overall Progress */}
                 <Card>
                   <CardHeader>
@@ -375,10 +406,15 @@ const MerchandiseManagement = () => {
                             outerRadius={120}
                             fill="#8884d8"
                             dataKey="value"
-                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                            label={({ name, percent }) =>
+                              `${name}: ${(percent * 100).toFixed(0)}%`
+                            }
                           >
                             {pieData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={index === 0 ? '#10B981' : '#F59E0B'} />
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={index === 0 ? "#10B981" : "#F59E0B"}
+                              />
                             ))}
                           </Pie>
                           <Tooltip />
@@ -400,7 +436,7 @@ const MerchandiseManagement = () => {
               </div>
             </TabsContent>
           </Tabs>
-          
+
           {/* QR Code Section */}
           <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border-indigo-100 dark:border-indigo-800">
             <CardContent className="p-6">
@@ -409,14 +445,22 @@ const MerchandiseManagement = () => {
                   <QrCode className="h-24 w-24 text-indigo-600" />
                 </div>
                 <div className="space-y-4 text-center md:text-left">
-                  <h3 className="text-xl font-medium text-indigo-800 dark:text-indigo-300">Quick Collection with QR Codes</h3>
+                  <h3 className="text-xl font-medium text-indigo-800 dark:text-indigo-300">
+                    Quick Collection with QR Codes
+                  </h3>
                   <p className="text-indigo-700 dark:text-indigo-400 max-w-md">
-                    Scan participant QR codes to quickly record merchandise collection.
-                    Use the mobile app or web scanner for instant updates.
+                    Scan participant QR codes to quickly record merchandise
+                    collection. Use the mobile app or web scanner for instant
+                    updates.
                   </p>
                   <div className="space-x-3">
-                    <Button className="bg-indigo-600 hover:bg-indigo-700">Open Scanner</Button>
-                    <Button variant="outline" className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950">
+                    <Button className="bg-indigo-600 hover:bg-indigo-700">
+                      Open Scanner
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                    >
                       Learn More
                     </Button>
                   </div>

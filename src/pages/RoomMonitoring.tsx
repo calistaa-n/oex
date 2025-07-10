@@ -1,15 +1,23 @@
-
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Users, ArrowUp, ArrowDown, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
 // Mock data for room utilization
 const roomData = [
@@ -28,7 +36,7 @@ const roomData = [
       { time: "10 AM", attendees: 32 },
       { time: "11 AM", attendees: 38 },
       { time: "12 PM", attendees: 0 },
-    ]
+    ],
   },
   {
     id: "room-b",
@@ -45,7 +53,7 @@ const roomData = [
       { time: "2 PM", attendees: 24 },
       { time: "3 PM", attendees: 28 },
       { time: "4 PM", attendees: 0 },
-    ]
+    ],
   },
   {
     id: "room-c",
@@ -62,7 +70,7 @@ const roomData = [
       { time: "9 AM", attendees: 0 },
       { time: "10 AM", attendees: 0 },
       { time: "11 AM", attendees: 0 },
-    ]
+    ],
   },
   {
     id: "room-d",
@@ -79,7 +87,7 @@ const roomData = [
       { time: "10 AM", attendees: 41 },
       { time: "11 AM", attendees: 30 },
       { time: "12 PM", attendees: 0 },
-    ]
+    ],
   },
   {
     id: "room-e",
@@ -96,35 +104,97 @@ const roomData = [
       { time: "10 AM", attendees: 0 },
       { time: "11 AM", attendees: 0 },
       { time: "12 PM", attendees: 0 },
-    ]
+    ],
   },
 ];
 
 // Comparison data for all rooms
 const roomComparisonData = [
-  { time: '9 AM', 'Room A': 0, 'Room B': 0, 'Room C': 0, 'Room D': 0, 'Room E': 0 },
-  { time: '10 AM', 'Room A': 32, 'Room B': 0, 'Room C': 0, 'Room D': 41, 'Room E': 0 },
-  { time: '11 AM', 'Room A': 38, 'Room B': 0, 'Room C': 0, 'Room D': 30, 'Room E': 0 },
-  { time: '12 PM', 'Room A': 0, 'Room B': 0, 'Room C': 0, 'Room D': 0, 'Room E': 0 },
-  { time: '1 PM', 'Room A': 0, 'Room B': 0, 'Room C': 0, 'Room D': 0, 'Room E': 0 },
-  { time: '2 PM', 'Room A': 0, 'Room B': 24, 'Room C': 0, 'Room D': 0, 'Room E': 0 },
-  { time: '3 PM', 'Room A': 0, 'Room B': 28, 'Room C': 0, 'Room D': 0, 'Room E': 0 },
-  { time: '4 PM', 'Room A': 0, 'Room B': 0, 'Room C': 0, 'Room D': 0, 'Room E': 0 },
+  {
+    time: "9 AM",
+    "Room A": 0,
+    "Room B": 0,
+    "Room C": 0,
+    "Room D": 0,
+    "Room E": 0,
+  },
+  {
+    time: "10 AM",
+    "Room A": 32,
+    "Room B": 0,
+    "Room C": 0,
+    "Room D": 41,
+    "Room E": 0,
+  },
+  {
+    time: "11 AM",
+    "Room A": 38,
+    "Room B": 0,
+    "Room C": 0,
+    "Room D": 30,
+    "Room E": 0,
+  },
+  {
+    time: "12 PM",
+    "Room A": 0,
+    "Room B": 0,
+    "Room C": 0,
+    "Room D": 0,
+    "Room E": 0,
+  },
+  {
+    time: "1 PM",
+    "Room A": 0,
+    "Room B": 0,
+    "Room C": 0,
+    "Room D": 0,
+    "Room E": 0,
+  },
+  {
+    time: "2 PM",
+    "Room A": 0,
+    "Room B": 24,
+    "Room C": 0,
+    "Room D": 0,
+    "Room E": 0,
+  },
+  {
+    time: "3 PM",
+    "Room A": 0,
+    "Room B": 28,
+    "Room C": 0,
+    "Room D": 0,
+    "Room E": 0,
+  },
+  {
+    time: "4 PM",
+    "Room A": 0,
+    "Room B": 0,
+    "Room C": 0,
+    "Room D": 0,
+    "Room E": 0,
+  },
 ];
 
 const RoomMonitoring = () => {
   const [lastUpdated] = useState(() => new Date().toLocaleTimeString());
   const isMobile = useIsMobile();
-  
+
   // Function to get status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "in-progress":
-        return <Badge className="bg-green-500 hover:bg-green-600">In Progress</Badge>;
+        return (
+          <Badge className="bg-green-500 hover:bg-green-600">In Progress</Badge>
+        );
       case "upcoming":
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Upcoming</Badge>;
+        return (
+          <Badge className="bg-blue-500 hover:bg-blue-600">Upcoming</Badge>
+        );
       case "available":
-        return <Badge className="bg-gray-500 hover:bg-gray-600">Available</Badge>;
+        return (
+          <Badge className="bg-gray-500 hover:bg-gray-600">Available</Badge>
+        );
       default:
         return <Badge>{status}</Badge>;
     }
@@ -147,9 +217,11 @@ const RoomMonitoring = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="Room Monitoring"
             description="Real-time status of workshop rooms and attendee counts"
           >
@@ -158,24 +230,28 @@ const RoomMonitoring = () => {
               Refresh
             </Button>
           </DashboardHeader>
-          
+
           <div className="mb-6 text-sm text-right text-gray-500">
             Last updated: {lastUpdated}
           </div>
-          
+
           <Tabs defaultValue="rooms">
             <TabsList className="mb-6">
               <TabsTrigger value="rooms">Room Details</TabsTrigger>
               <TabsTrigger value="comparison">Comparison</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="rooms">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {roomData.map((room) => (
-                  <Card key={room.id} className={cn(
-                    "overflow-hidden",
-                    room.status === "in-progress" && "border-green-200 dark:border-green-900",
-                  )}>
+                  <Card
+                    key={room.id}
+                    className={cn(
+                      "overflow-hidden",
+                      room.status === "in-progress" &&
+                        "border-green-200 dark:border-green-900"
+                    )}
+                  >
                     <CardContent className="p-0">
                       <div className="p-6">
                         <div className="flex justify-between items-start mb-4">
@@ -187,7 +263,7 @@ const RoomMonitoring = () => {
                           </div>
                           {getStatusBadge(room.status)}
                         </div>
-                        
+
                         <div className="space-y-4">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
@@ -200,28 +276,45 @@ const RoomMonitoring = () => {
                               {getTrendIndicator(room.trend)}
                             </div>
                           </div>
-                          
+
                           <div className="h-[120px]">
                             <ResponsiveContainer width="100%" height="100%">
                               <BarChart
                                 data={room.hourlyData}
-                                margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                                margin={{
+                                  top: 5,
+                                  right: 10,
+                                  left: 0,
+                                  bottom: 5,
+                                }}
                               >
-                                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  opacity={0.2}
+                                />
                                 <XAxis dataKey="time" />
-                                <YAxis allowDecimals={false} domain={[0, 'dataMax + 5']} />
+                                <YAxis
+                                  allowDecimals={false}
+                                  domain={[0, "dataMax + 5"]}
+                                />
                                 <Tooltip />
                                 <Bar dataKey="attendees" fill="#6366F1" />
                               </BarChart>
                             </ResponsiveContainer>
                           </div>
-                          
+
                           <div className="flex justify-between text-xs text-gray-500">
                             <div>
-                              Start: <span className="font-medium">{room.startTime}</span>
+                              Start:{" "}
+                              <span className="font-medium">
+                                {room.startTime}
+                              </span>
                             </div>
                             <div>
-                              End: <span className="font-medium">{room.endTime}</span>
+                              End:{" "}
+                              <span className="font-medium">
+                                {room.endTime}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -231,7 +324,7 @@ const RoomMonitoring = () => {
                 ))}
               </div>
             </TabsContent>
-            
+
             <TabsContent value="comparison">
               <Card>
                 <CardContent className="pt-6">

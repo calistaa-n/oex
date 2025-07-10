@@ -1,21 +1,20 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "@/components/Sidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Search, Plus, Filter } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
 // Mock data for workshops
 const workshopsData = [
@@ -28,7 +27,7 @@ const workshopsData = [
     location: "Room A",
     capacity: 50,
     registered: 42,
-    status: "upcoming"
+    status: "upcoming",
   },
   {
     id: 2,
@@ -39,7 +38,7 @@ const workshopsData = [
     location: "Room B",
     capacity: 30,
     registered: 30,
-    status: "full"
+    status: "full",
   },
   {
     id: 3,
@@ -50,7 +49,7 @@ const workshopsData = [
     location: "Room C",
     capacity: 40,
     registered: 22,
-    status: "upcoming"
+    status: "upcoming",
   },
   {
     id: 4,
@@ -61,7 +60,7 @@ const workshopsData = [
     location: "Room A",
     capacity: 35,
     registered: 18,
-    status: "upcoming"
+    status: "upcoming",
   },
   {
     id: 5,
@@ -72,31 +71,36 @@ const workshopsData = [
     location: "Room D",
     capacity: 45,
     registered: 43,
-    status: "almost-full"
-  }
+    status: "almost-full",
+  },
 ];
 
 const WorkshopManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  
+
   // Filter workshops based on search term
-  const filteredWorkshops = workshopsData.filter((workshop) =>
-    workshop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    workshop.speaker.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    workshop.location.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredWorkshops = workshopsData.filter(
+    (workshop) =>
+      workshop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      workshop.speaker.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      workshop.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Function to get status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "upcoming":
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Upcoming</Badge>;
+        return (
+          <Badge className="bg-blue-500 hover:bg-blue-600">Upcoming</Badge>
+        );
       case "full":
         return <Badge className="bg-red-500 hover:bg-red-600">Full</Badge>;
       case "almost-full":
-        return <Badge className="bg-amber-500 hover:bg-amber-600">Almost Full</Badge>;
+        return (
+          <Badge className="bg-amber-500 hover:bg-amber-600">Almost Full</Badge>
+        );
       default:
         return <Badge>{status}</Badge>;
     }
@@ -105,9 +109,11 @@ const WorkshopManagement = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="Workshop Management"
             description="Manage your workshops, speakers, and participants"
           >
@@ -116,7 +122,7 @@ const WorkshopManagement = () => {
               Add Workshop
             </Button>
           </DashboardHeader>
-          
+
           {/* Search and filters */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
@@ -133,7 +139,7 @@ const WorkshopManagement = () => {
               Filter
             </Button>
           </div>
-          
+
           {/* Workshops table */}
           <div className="rounded-lg border bg-white dark:bg-gray-800 overflow-x-auto">
             <Table>
@@ -150,26 +156,34 @@ const WorkshopManagement = () => {
               <TableBody>
                 {filteredWorkshops.map((workshop) => (
                   <TableRow key={workshop.id}>
-                    <TableCell className="font-medium">{workshop.title}</TableCell>
+                    <TableCell className="font-medium">
+                      {workshop.title}
+                    </TableCell>
                     <TableCell>{workshop.speaker}</TableCell>
                     <TableCell>
                       {workshop.date.split("-").slice(1).join("/")}
                       <br />
-                      <span className="text-xs text-gray-500">{workshop.time}</span>
+                      <span className="text-xs text-gray-500">
+                        {workshop.time}
+                      </span>
                     </TableCell>
                     <TableCell>{workshop.location}</TableCell>
                     <TableCell className="text-center">
                       {workshop.registered}/{workshop.capacity}
                       <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                        <div 
+                        <div
                           className={`h-1.5 rounded-full ${
-                            workshop.registered / workshop.capacity > 0.9 
-                              ? "bg-red-500" 
-                              : workshop.registered / workshop.capacity > 0.7 
-                                ? "bg-amber-500" 
-                                : "bg-green-500"
-                          }`} 
-                          style={{ width: `${(workshop.registered / workshop.capacity) * 100}%` }}
+                            workshop.registered / workshop.capacity > 0.9
+                              ? "bg-red-500"
+                              : workshop.registered / workshop.capacity > 0.7
+                              ? "bg-amber-500"
+                              : "bg-green-500"
+                          }`}
+                          style={{
+                            width: `${
+                              (workshop.registered / workshop.capacity) * 100
+                            }%`,
+                          }}
                         ></div>
                       </div>
                     </TableCell>

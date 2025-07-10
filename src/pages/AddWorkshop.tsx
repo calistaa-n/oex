@@ -1,35 +1,34 @@
-
+import * as z from "zod";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import Sidebar from "@/components/Sidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Textarea } from "@/components/ui/textarea";
-import { 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import {
   Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
 // Form validation schema
 const workshopFormSchema = z.object({
@@ -39,8 +38,13 @@ const workshopFormSchema = z.object({
   startTime: z.string().min(1, { message: "Start time is required." }),
   endTime: z.string().min(1, { message: "End time is required." }),
   location: z.string().min(1, { message: "Location is required." }),
-  capacity: z.coerce.number().int().min(1, { message: "Capacity must be at least 1." }),
-  description: z.string().min(10, { message: "Description must be at least 10 characters." }),
+  capacity: z.coerce
+    .number()
+    .int()
+    .min(1, { message: "Capacity must be at least 1." }),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters." }),
 });
 
 type WorkshopFormValues = z.infer<typeof workshopFormSchema>;
@@ -61,7 +65,7 @@ const AddWorkshop = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Initialize form with validation
   const form = useForm<WorkshopFormValues>({
     resolver: zodResolver(workshopFormSchema),
@@ -81,22 +85,22 @@ const AddWorkshop = () => {
   const onSubmit = async (values: WorkshopFormValues) => {
     try {
       setIsSubmitting(true);
-      
+
       // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Here you would normally send data to your API
       console.log("Workshop form data:", values);
-      
+
       // Invalidate queries to refetch workshop data
       queryClient.invalidateQueries({ queryKey: ["workshops"] });
-      
+
       // Show success message
       toast({
         title: "Workshop Created",
         description: `${values.title} has been successfully added to the schedule.`,
       });
-      
+
       // Navigate back to workshop management
       navigate("/workshop-management");
     } catch (error) {
@@ -114,14 +118,16 @@ const AddWorkshop = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="Add New Workshop"
             description="Create and schedule a new workshop for your event"
           >
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="gap-2"
               onClick={() => navigate("/workshop-management")}
             >
@@ -129,11 +135,14 @@ const AddWorkshop = () => {
               Back
             </Button>
           </DashboardHeader>
-          
+
           <Card className="max-w-3xl mx-auto">
             <CardContent className="pt-6">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
+                >
                   <FormField
                     control={form.control}
                     name="title"
@@ -141,16 +150,20 @@ const AddWorkshop = () => {
                       <FormItem>
                         <FormLabel>Workshop Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter workshop title" {...field} />
+                          <Input
+                            placeholder="Enter workshop title"
+                            {...field}
+                          />
                         </FormControl>
                         <FormDescription>
-                          The name of your workshop as it will appear on the schedule.
+                          The name of your workshop as it will appear on the
+                          schedule.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="speaker"
@@ -158,13 +171,16 @@ const AddWorkshop = () => {
                       <FormItem>
                         <FormLabel>Speaker Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter speaker's full name" {...field} />
+                          <Input
+                            placeholder="Enter speaker's full name"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField
                       control={form.control}
@@ -182,7 +198,7 @@ const AddWorkshop = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="startTime"
@@ -199,7 +215,7 @@ const AddWorkshop = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="endTime"
@@ -217,7 +233,7 @@ const AddWorkshop = () => {
                       )}
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
@@ -228,7 +244,10 @@ const AddWorkshop = () => {
                           <FormControl>
                             <div className="relative">
                               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <SelectTrigger className="pl-10">
                                   <SelectValue placeholder="Select a room" />
                                 </SelectTrigger>
@@ -246,7 +265,7 @@ const AddWorkshop = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="capacity"
@@ -256,9 +275,9 @@ const AddWorkshop = () => {
                           <FormControl>
                             <div className="relative">
                               <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Input 
-                                type="number" 
-                                placeholder="Maximum number of participants" 
+                              <Input
+                                type="number"
+                                placeholder="Maximum number of participants"
                                 className="pl-10"
                                 {...field}
                               />
@@ -272,7 +291,7 @@ const AddWorkshop = () => {
                       )}
                     />
                   </div>
-                  
+
                   <FormField
                     control={form.control}
                     name="description"
@@ -280,10 +299,10 @@ const AddWorkshop = () => {
                       <FormItem>
                         <FormLabel>Workshop Description</FormLabel>
                         <FormControl>
-                          <Textarea 
-                            placeholder="Enter a detailed description of the workshop" 
+                          <Textarea
+                            placeholder="Enter a detailed description of the workshop"
                             className="min-h-[120px]"
-                            {...field} 
+                            {...field}
                           />
                         </FormControl>
                         <FormDescription>
@@ -293,10 +312,10 @@ const AddWorkshop = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <div className="flex justify-end space-x-4">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       onClick={() => navigate("/workshop-management")}
                       type="button"
                     >

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase";
 
 const SignUp = () => {
@@ -16,15 +16,15 @@ const SignUp = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    if(password !== confirmPassword) {
-        setError("Passwords do not match.");
-        return;
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
     }
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       // Signup successful
-      navigate("/home"); 
+      navigate("/home");
     } catch (err) {
       setError(err.message);
     }
@@ -51,7 +51,7 @@ const SignUp = () => {
               value={password}
               placeholder="Create password"
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-indigo-200"
-              onChange={(e)=> setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
             />
@@ -76,8 +76,7 @@ const SignUp = () => {
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
-            {error && <div className="text-red-500 text-sm">{error}</div>}
-
+          {error && <div className="text-red-500 text-sm">{error}</div>}
 
           <button
             type="submit"
@@ -89,7 +88,10 @@ const SignUp = () => {
 
         <p className="text-center text-sm">
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold text-indigo-600 hover:underline">
+          <Link
+            to="/login"
+            className="font-semibold text-indigo-600 hover:underline"
+          >
             Login
           </Link>
         </p>
@@ -101,7 +103,11 @@ const SignUp = () => {
         </div>
 
         <button className="w-full flex items-center justify-center gap-2 border py-2 rounded hover:bg-gray-100 transition">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
           Login with Google
         </button>
       </div>
