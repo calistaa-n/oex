@@ -37,12 +37,12 @@ type GroupedEvents = {
 };
 
 const Agenda = () => {
-  const [groupedEvents, setGroupedEvents] = useState<GroupedEvents>({});
-
-  const [activeMonth, setActiveMonth] = useState<string>("");
-  const [events, setEvents] = useState<Event[]>([]);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+
+  const [groupedEvents, setGroupedEvents] = useState<GroupedEvents>({});
+  const [activeMonth, setActiveMonth] = useState<string>("");
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
