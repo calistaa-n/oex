@@ -17,6 +17,25 @@ import { Badge } from "@/components/ui/badge";
 import Sidebar from "@/components/Sidebar";
 import DashboardHeader from "@/components/DashboardHeader";
 
+type Event = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+  speaker?: string;
+  capacity?: number;
+  registered?: number;
+  type?: string;
+};
+
+type GroupedEvents = {
+  [month: string]: {
+    [day: string]: Event[];
+  };
+};
+
 const Agenda = () => {
   const [groupedEvents, setGroupedEvents] = useState<GroupedEvents>({});
 
@@ -83,25 +102,6 @@ const Agenda = () => {
       default:
         return <Badge>{type}</Badge>;
     }
-  };
-
-  type Event = {
-    id: string;
-    title: string;
-    description: string;
-    location: string;
-    start_time: string;
-    end_time: string;
-    speaker?: string;
-    capacity?: number;
-    registered?: number;
-    type?: string;
-  };
-
-  type GroupedEvents = {
-    [month: string]: {
-      [day: string]: Event[];
-    };
   };
 
   return (

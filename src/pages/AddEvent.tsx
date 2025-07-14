@@ -76,6 +76,7 @@ const AddEvent = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCapacity, setShowCapacity] = useState(false);
 
