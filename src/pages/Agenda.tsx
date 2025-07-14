@@ -9,6 +9,7 @@ import {
   Plus,
 } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Card, CardContent } from "@/components/ui/card";
@@ -108,7 +109,10 @@ const Agenda = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div
-        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+        className={cn(
+          "transition-all duration-300",
+          isMobile ? "pl-0" : "pl-64"
+        )}
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader
@@ -127,11 +131,12 @@ const Agenda = () => {
               <button
                 key={month}
                 onClick={() => setActiveMonth(month)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap",
                   activeMonth === month
                     ? "bg-indigo-100 text-indigo-600"
                     : "bg-gray-200 text-gray-700"
-                }`}
+                )}
               >
                 {month}
               </button>

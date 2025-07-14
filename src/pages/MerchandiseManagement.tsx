@@ -21,6 +21,7 @@ import {
   Check,
   X,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -179,7 +180,10 @@ const MerchandiseManagement = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div
-        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+        className={cn(
+          "transition-all duration-300",
+          isMobile ? "pl-0" : "pl-64"
+        )}
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader
@@ -334,17 +338,26 @@ const MerchandiseManagement = () => {
                           <TableCell>{collection.participantId}</TableCell>
                           <TableCell>{collection.item}</TableCell>
                           <TableCell className="text-center">
-                            {collection.status === "collected" ? (
-                              <span className="inline-flex items-center text-green-600">
-                                <Check className="h-4 w-4 mr-1" />
-                                Collected
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center text-red-600">
-                                <X className="h-4 w-4 mr-1" />
-                                Failed
-                              </span>
-                            )}
+                            <span
+                              className={cn(
+                                "inline-flex items-center",
+                                collection.status === "collected"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              )}
+                            >
+                              {collection.status === "collected" ? (
+                                <>
+                                  <Check className="h-4 w-4 mr-1" />
+                                  Collected
+                                </>
+                              ) : (
+                                <>
+                                  <X className="h-4 w-4 mr-1" />
+                                  Failed
+                                </>
+                              )}
+                            </span>
                           </TableCell>
                         </TableRow>
                       ))}

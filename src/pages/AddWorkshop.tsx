@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Textarea } from "@/components/ui/textarea";
@@ -119,7 +120,10 @@ const AddWorkshop = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div
-        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+        className={cn(
+          "transition-all duration-300",
+          isMobile ? "pl-0" : "pl-64"
+        )}
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader

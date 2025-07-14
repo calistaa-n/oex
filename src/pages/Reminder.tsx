@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Bell, Clock, Send, Filter } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Table,
@@ -146,7 +147,10 @@ const Reminder = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div
-        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+        className={cn(
+          "transition-all duration-300",
+          isMobile ? "pl-0" : "pl-64"
+        )}
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader

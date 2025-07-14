@@ -5,6 +5,7 @@ import {
   CalendarDays,
   ShoppingBag,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/Sidebar";
@@ -76,7 +77,10 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div
-        className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}
+        className={cn(
+          "transition-all duration-300",
+          isMobile ? "pl-0" : "pl-64"
+        )}
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader
