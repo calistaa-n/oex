@@ -61,6 +61,11 @@ function EventCard({ event }: { event: Event }) {
 }
 
 export default function Overview() {
+  const [year, setYear] = useState("all");
+  const [status, setStatus] = useState<string>("all");
+  const [events, setEvents] = useState<Event[]>([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchEvents = async () => {
       const { data, error } = await supabase
@@ -73,8 +78,6 @@ export default function Overview() {
     };
     fetchEvents();
   }, []);
-  const [year, setYear] = useState("all");
-  const [status, setStatus] = useState<string>("all");
 
   function filterEventsByYear(events: Event[], year: string) {
     if (year === "all") return events;
@@ -85,51 +88,9 @@ export default function Overview() {
     if (status === "all") return events;
     return events.filter((event) => event.status === status);
   }
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: "1",
-      name: "Google I/O Extended",
-      date: "Saturday, 02 Aug 2025",
-      coverImageUrl: "/google-io.png",
-      status: "Not Started",
-      isRecentlyAdded: true,
-    },
-    {
-      id: "2",
-      name: "Build With AI x Cloud Roadshow",
-      date: "Sunday, 26 May 2025",
-      coverImageUrl: "/cloud-roadshow.png",
-      status: "Ongoing",
-      isRecentlyAdded: true,
-    },
-    {
-      id: "3",
-      name: "Google Developer Festival",
-      date: "Saturday, 1 Apr 2024",
-      coverImageUrl: "/devfest.png",
-      status: "Finished",
-      isRecentlyAdded: false,
-    },
-    {
-      id: "4",
-      name: "Flutter Indonesia Meetup",
-      date: "Saturday, 15 Jun 2024",
-      coverImageUrl: "/flutter-meetup.png",
-      status: "Finished",
-      isRecentlyAdded: false,
-    },
-    {
-      id: "5",
-      name: "ReactJS Conference",
-      date: "Saturday, 20 Jul 2023",
-      coverImageUrl: "/reactjs-conference.png",
-      status: "Finished",
-      isRecentlyAdded: false,
-    },
-  ]);
+
   const filteredEventsByStatus = filterEventsByStatus(events, status);
   const filteredEvents = filterEventsByYear(filteredEventsByStatus, year);
-  const navigate = useNavigate();
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
