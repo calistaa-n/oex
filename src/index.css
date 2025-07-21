@@ -99,3 +99,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.hide-date-time-icon::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+/* 
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+} */
