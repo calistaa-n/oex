@@ -1,37 +1,37 @@
-
+import * as z from "zod";
+import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "@/lib/utils";
+import supabase from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
-import Sidebar from "@/components/Sidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Textarea } from "@/components/ui/textarea";
-import { 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import {
   Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useIsMobile } from "@/hooks/use-mobile";
-import React from "react";
-import supabase from "@/lib/supabase";
+import { Button } from "@/components/ui/button";
+import Sidebar from "@/components/Sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
 // Form validation schema
 const eventFormSchema = z.object({
@@ -41,8 +41,14 @@ const eventFormSchema = z.object({
   startTime: z.string().min(1, { message: "Start time is required." }),
   endTime: z.string().min(1, { message: "End time is required." }),
   location: z.string().min(1, { message: "Location is required." }),
-  capacity: z.coerce.number().int().min(1, { message: "Capacity must be at least 1." }).optional(),
-  description: z.string().min(10, { message: "Description must be at least 10 characters." }),
+  capacity: z.coerce
+    .number()
+    .int()
+    .min(1, { message: "Capacity must be at least 1." })
+    .optional(),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters." }),
 });
 
 type EventFormValues = z.infer<typeof eventFormSchema>;
@@ -71,9 +77,10 @@ const AddAgenda = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCapacity, setShowCapacity] = useState(false);
-  
+
   // Initialize form with validation
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -91,7 +98,7 @@ const AddAgenda = () => {
 
   // Watch the event type to conditionally display capacity field
   const eventType = form.watch("type");
-  
+
   // Update capacity visibility when event type changes
   React.useEffect(() => {
     // Only show capacity for feedback sessions and some social events
@@ -102,18 +109,16 @@ const AddAgenda = () => {
   const onSubmit = async (values: EventFormValues) => {
     try {
       setIsSubmitting(true);
-       const { error } = await supabase
-        .from("events")
-        .insert([
-          {
+      const { error } = await supabase.from("events").insert([
+        {
           title: values.title,
           date: values.date,
           start_time: values.startTime,
           end_time: values.endTime,
           location: values.location,
           description: values.description,
-          }
-        ]);
+        },
+      ]);
 
       if (error) throw error;
 
@@ -124,7 +129,7 @@ const AddAgenda = () => {
         title: "Event Created",
         description: `${values.title} has been successfully added to the agenda.`,
       });
-      
+
       // Navigate back to agenda page
       navigate("/agenda");
     } catch (error) {
@@ -137,19 +142,24 @@ const AddAgenda = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };      
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className={`transition-all duration-300 ${isMobile ? "pl-0" : "pl-64"}`}>
+      <div
+        className={cn(
+          "transition-all duration-300",
+          isMobile ? "pl-0" : "pl-64"
+        )}
+      >
         <main className="container mx-auto py-8 px-4">
-          <DashboardHeader 
+          <DashboardHeader
             title="Add New Event"
             description="Create and schedule a new event for your agenda"
           >
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="gap-2"
               onClick={() => navigate("/agenda")}
             >
@@ -157,11 +167,14 @@ const AddAgenda = () => {
               Back
             </Button>
           </DashboardHeader>
-          
+
           <Card className="max-w-3xl mx-auto">
             <CardContent className="pt-6">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
+                >
                   <FormField
                     control={form.control}
                     name="title"
@@ -172,13 +185,14 @@ const AddAgenda = () => {
                           <Input placeholder="Enter event title" {...field} />
                         </FormControl>
                         <FormDescription>
-                          The name of your event as it will appear on the agenda.
+                          The name of your event as it will appear on the
+                          agenda.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="type"
@@ -186,7 +200,10 @@ const AddAgenda = () => {
                       <FormItem>
                         <FormLabel>Event Type</FormLabel>
                         <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <SelectTrigger>
                               <SelectValue placeholder="Select event type" />
                             </SelectTrigger>
@@ -203,7 +220,7 @@ const AddAgenda = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField
                       control={form.control}
@@ -221,7 +238,7 @@ const AddAgenda = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="startTime"
@@ -238,7 +255,7 @@ const AddAgenda = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="endTime"
@@ -256,7 +273,7 @@ const AddAgenda = () => {
                       )}
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
@@ -267,7 +284,10 @@ const AddAgenda = () => {
                           <FormControl>
                             <div className="relative">
                               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <SelectTrigger className="pl-10">
                                   <SelectValue placeholder="Select a location" />
                                 </SelectTrigger>
@@ -285,7 +305,7 @@ const AddAgenda = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     {showCapacity && (
                       <FormField
                         control={form.control}
@@ -296,11 +316,11 @@ const AddAgenda = () => {
                             <FormControl>
                               <div className="relative">
                                 <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                <Input 
-                                  type="number" 
-                                  placeholder="Maximum number of attendees" 
+                                <Input
+                                  type="number"
+                                  placeholder="Maximum number of attendees"
                                   className="pl-10"
-                                  {...field} 
+                                  {...field}
                                 />
                               </div>
                             </FormControl>
@@ -313,7 +333,7 @@ const AddAgenda = () => {
                       />
                     )}
                   </div>
-                  
+
                   <FormField
                     control={form.control}
                     name="description"
@@ -321,10 +341,10 @@ const AddAgenda = () => {
                       <FormItem>
                         <FormLabel>Event Description</FormLabel>
                         <FormControl>
-                          <Textarea 
-                            placeholder="Enter a detailed description of the event" 
+                          <Textarea
+                            placeholder="Enter a detailed description of the event"
                             className="min-h-[120px]"
-                            {...field} 
+                            {...field}
                           />
                         </FormControl>
                         <FormDescription>
@@ -334,10 +354,10 @@ const AddAgenda = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <div className="flex justify-end space-x-4">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       onClick={() => navigate("/agenda")}
                       type="button"
                     >
