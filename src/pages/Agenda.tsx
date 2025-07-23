@@ -18,7 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import Sidebar from "@/components/Sidebar";
 import DashboardHeader from "@/components/DashboardHeader";
 
-type Event = {
+type Agenda = {
   id: string;
   title: string;
   description: string;
@@ -31,9 +31,9 @@ type Event = {
   type?: string;
 };
 
-type GroupedEvents = {
+type GroupedAgendas = {
   [month: string]: {
-    [day: string]: Event[];
+    [day: string]: Agenda[];
   };
 };
 
@@ -41,50 +41,50 @@ const Agenda = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
-  const [groupedEvents, setGroupedEvents] = useState<GroupedEvents>({});
+  const [groupedAgendas, setGroupedAgendas] = useState<GroupedAgendas>({});
   const [activeMonth, setActiveMonth] = useState<string>("");
-  const [events, setEvents] = useState<Event[]>([]);
+  const [agendas, setAgendas] = useState<Agenda[]>([]);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchAgendas = async () => {
       const { data, error } = await supabase
         .from("agendas")
         .select("*")
         .order("date", { ascending: true });
 
-      if (error) console.error("Error fetching events:", error);
-      else setEvents(data);
+      if (error) console.error("Error fetching agendas:", error);
+      else setAgendas(data);
     };
-    fetchEvents();
+    fetchAgendas();
   }, []);
 
   useEffect(() => {
-    const grouped = groupEventsByMonthAndDate(events);
-    setGroupedEvents(grouped);
-  }, [events]);
+    const grouped = groupAgendasByMonthAndDate(agendas);
+    setGroupedAgendas(grouped);
+  }, [agendas]);
 
   useEffect(() => {
-    if (!activeMonth && Object.keys(groupedEvents).length > 0) {
-      setActiveMonth(Object.keys(groupedEvents)[0]);
+    if (!activeMonth && Object.keys(groupedAgendas).length > 0) {
+      setActiveMonth(Object.keys(groupedAgendas)[0]);
     }
-  }, [groupedEvents, activeMonth]);
+  }, [groupedAgendas, activeMonth]);
 
-  const groupEventsByMonthAndDate = (events) => {
+  const groupAgendasByMonthAndDate = (agendas) => {
     const grouped = {};
-    events.forEach((event) => {
-      const dateObj = parseISO(event.date);
+    agendas.forEach((agenda) => {
+      const dateObj = parseISO(agenda.date);
       const monthYear = format(dateObj, "MMMM yyyy");
       const day = format(dateObj, "EEEE, MMM d");
 
       if (!grouped[monthYear]) grouped[monthYear] = {};
       if (!grouped[monthYear][day]) grouped[monthYear][day] = [];
 
-      grouped[monthYear][day].push(event);
+      grouped[monthYear][day].push(agenda);
     });
     return grouped;
   };
 
-  const getEventTypeBadge = (type) => {
+  const getAgendaTypeBadge = (type) => {
     switch (type) {
       case "workshop":
         return (
@@ -116,18 +116,18 @@ const Agenda = () => {
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader
-            title="Event Agenda"
-            description="Real-time monitoring of workshop schedule"
+            title="Agenda"
+            description="Real-time monitoring of event's schedule"
           >
             <Button className="gap-2" onClick={() => navigate("/add-agenda")}>
               {" "}
-              <Plus className="h-4 w-4" /> Add Event{" "}
+              <Plus className="h-4 w-4" /> Add Agenda{" "}
             </Button>
           </DashboardHeader>
 
           {/* Month Tabs */}
           <div className="flex gap-2 mb-6 overflow-x-auto">
-            {Object.keys(groupedEvents).map((month) => (
+            {Object.keys(groupedAgendas).map((month) => (
               <button
                 key={month}
                 onClick={() => setActiveMonth(month)}
@@ -143,17 +143,17 @@ const Agenda = () => {
             ))}
           </div>
 
-          {/* Events of Active Month */}
-          {groupedEvents[activeMonth] &&
-            Object.entries(groupedEvents[activeMonth]).map(
-              ([day, dayEvents]) => (
+          {/* Agendas of Active Month */}
+          {groupedAgendas[activeMonth] &&
+            Object.entries(groupedAgendas[activeMonth]).map(
+              ([day, dayAgendas]) => (
                 <div key={day} className="mb-6">
                   <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">
                     {day}
                   </h3>
                   <div className="space-y-4">
-                    {dayEvents.map((event) => (
-                      <Card key={event.id} className="overflow-hidden">
+                    {dayAgendas.map((agenda) => (
+                      <Card key={agenda.id} className="overflow-hidden">
                         <CardContent className="p-0">
                           <div className="p-6">
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
@@ -161,42 +161,42 @@ const Agenda = () => {
                                 <div className="flex items-center">
                                   <Clock className="h-4 w-4 text-gray-500 mr-2" />
                                   <span className="text-sm font-medium">
-                                    {event.start_time?.slice(0, 5)} -{" "}
-                                    {event.end_time?.slice(0, 5)}
+                                    {agenda.start_time?.slice(0, 5)} -{" "}
+                                    {agenda.end_time?.slice(0, 5)}
                                   </span>
                                 </div>
                                 <div className="flex items-center">
                                   <MapPin className="h-4 w-4 text-gray-500 mr-2" />
                                   <span className="text-sm">
-                                    {event.location}
+                                    {agenda.location}
                                   </span>
                                 </div>
-                                {event.capacity && (
+                                {agenda.capacity && (
                                   <div className="flex items-center">
                                     <Users className="h-4 w-4 text-gray-500 mr-2" />
                                     <span className="text-sm">
-                                      {event.registered}/{event.capacity}
+                                      {agenda.registered}/{agenda.capacity}
                                     </span>
                                   </div>
                                 )}
                               </div>
-                              {getEventTypeBadge(event.type)}
+                              {getAgendaTypeBadge(agenda.type)}
                             </div>
                             <h3 className="text-xl font-medium mb-2">
-                              {event.title}
+                              {agenda.title}
                             </h3>
-                            {event.speaker && (
+                            {agenda.speaker && (
                               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                                 Speaker:{" "}
                                 <span className="font-medium">
-                                  {event.speaker}
+                                  {agenda.speaker}
                                 </span>
                               </p>
                             )}
                             <p className="text-gray-600 dark:text-gray-400">
-                              {event.description}
+                              {agenda.description}
                             </p>
-                            {event.type === "workshop" && (
+                            {agenda.type === "workshop" && (
                               <div className="mt-4 flex justify-end">
                                 <Button
                                   variant="outline"
