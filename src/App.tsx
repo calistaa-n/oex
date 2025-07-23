@@ -1,22 +1,22 @@
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Overview from "./pages/Overview";
-import SignUp from "./pages/SignUp";
-import NotFound from "./pages/NotFound";
+
 import WorkshopManagement from "./pages/WorkshopManagement";
+// import SignUp from "./pages/SignUp";
 import RoomMonitoring from "./pages/RoomMonitoring";
 import Reminder from "./pages/Reminder";
-import Agenda from "./pages/Agenda";
+import Overview from "./pages/Overview";
+import NotFound from "./pages/NotFound";
 import MerchandiseManagement from "./pages/MerchandiseManagement";
+import Login from "./pages/Login";
+import Index from "./pages/Index";
+import CreateEvent from "./pages/CreateEvent";
+import Agenda from "./pages/Agenda";
 import AddWorkshop from "./pages/AddWorkshop";
 import AddAgenda from "./pages/AddAgenda";
-import CreateEvent from "./pages/CreateEvent";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +38,10 @@ const App = () => (
           <Route path="/room-monitoring" element={<RoomMonitoring />} />
           <Route path="/reminder" element={<Reminder />} />
           <Route path="/agenda" element={<Agenda />} />
-          <Route path="/merchandise-management" element={<MerchandiseManagement />} />
+          <Route
+            path="/merchandise-management"
+            element={<MerchandiseManagement />}
+          />
           <Route path="/add-workshop" element={<AddWorkshop />} />
           <Route path="/add-agenda" element={<AddAgenda />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
