@@ -16,7 +16,7 @@ type Event = {
   id: string;
   name: string;
   date: string;
-  coverImageUrl: string;
+  coverUrl: string;
   isRecentlyAdded?: boolean;
   status: "Not Started" | "Ongoing" | "Finished";
 };
@@ -26,7 +26,7 @@ function EventCard({ event }: { event: Event }) {
     <div className="flex items-center justify-between p-4 border rounded-2xl shadow hover:bg-gray-50 transition mb-4">
       <div className="flex items-center space-x-4">
         <img
-          src={event.coverImageUrl || "/placeholder.png"}
+          src={event.coverUrl || "/placeholder.png"}
           alt={event.name}
           className="h-12 w-12 rounded object-cover border"
         />
