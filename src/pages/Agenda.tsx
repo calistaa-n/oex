@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import {
-  Calendar,
-  Clock,
-  MapPin,
-  Users,
-  ChevronRight,
-  Plus,
-} from "lucide-react";
+import { Clock, MapPin, Users, ChevronRight, Plus } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase";
@@ -40,6 +33,8 @@ type GroupedAgendas = {
 
 const Agenda = () => {
   const { id } = useParams();
+  const eventId = Number(id);
+
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
@@ -53,7 +48,7 @@ const Agenda = () => {
         .from("agendas")
         .select("*")
         .order("date", { ascending: true })
-        .eq("eventId", id);
+        .eq("event_id", eventId);
 
       if (error) console.error("Error fetching agendas:", error);
       else setAgendas(data);
