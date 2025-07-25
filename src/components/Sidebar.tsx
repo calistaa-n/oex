@@ -29,7 +29,7 @@ export default function Sidebar() {
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navItems: NavItem[] = [
     {
       title: "Dashboard",
