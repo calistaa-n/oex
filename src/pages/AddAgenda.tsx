@@ -45,7 +45,9 @@ const agendaFormSchema = z.object({
 type AgendaFormValues = z.infer<typeof agendaFormSchema>;
 
 const AddAgenda = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const eventId = Number(id);
+
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -77,6 +79,7 @@ const AddAgenda = () => {
           start_time: values.startTime,
           end_time: values.endTime,
           description: values.description,
+          event_id: eventId,
         },
       ]);
 
