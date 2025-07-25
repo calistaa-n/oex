@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
@@ -27,7 +27,7 @@ import Sidebar from "@/components/Sidebar";
 import DashboardHeader from "@/components/DashboardHeader";
 
 // Form validation schema
-const eventFormSchema = z.object({
+const agendaFormSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters." }),
   date: z.string().min(1, { message: "Date is required." }),
   startTime: z.string().min(1, { message: "Start time is required." }),
@@ -42,7 +42,7 @@ const eventFormSchema = z.object({
     .min(10, { message: "Description must be at least 10 characters." }),
 });
 
-type EventFormValues = z.infer<typeof eventFormSchema>;
+type AgendaFormValues = z.infer<typeof agendaFormSchema>;
 
 const AddAgenda = () => {
   const { id } = useParams();
@@ -54,8 +54,8 @@ const AddAgenda = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize form with validation
-  const form = useForm<EventFormValues>({
-    resolver: zodResolver(eventFormSchema),
+  const form = useForm<AgendaFormValues>({
+    resolver: zodResolver(agendaFormSchema),
     defaultValues: {
       title: "",
       date: "",
@@ -67,10 +67,10 @@ const AddAgenda = () => {
   });
 
   // Form submission handler
-  const onSubmit = async (values: EventFormValues) => {
+  const onSubmit = async (values: AgendaFormValues) => {
     try {
       setIsSubmitting(true);
-      const { error } = await supabase.from("events").insert([
+      const { error } = await supabase.from("agendas").insert([
         {
           title: values.title,
           date: values.date,
@@ -86,18 +86,18 @@ const AddAgenda = () => {
 
       // Show success message
       toast({
-        title: "Event Created",
+        title: "Agenda Created",
         description: `${values.title} has been successfully added to the agenda.`,
       });
 
       // Navigate back to agenda page
       navigate(`/event/${id}/agendas`);
     } catch (error) {
-      console.error("Error submitting event:", error);
+      console.error("Error submitting agenda:", error);
       toast({
         variant: "destructive",
         title: "Something went wrong",
-        description: "Could not create event. Please try again.",
+        description: "Could not create agenda. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -115,8 +115,8 @@ const AddAgenda = () => {
       >
         <main className="container mx-auto py-8 px-4">
           <DashboardHeader
-            title="Add New Event"
-            description="Create and schedule a new event for your agenda"
+            title="Add New Agenda"
+            description="Create new agenda for your event"
           >
             <Button
               variant="outline"
@@ -140,14 +140,10 @@ const AddAgenda = () => {
                     name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Event Title</FormLabel>
+                        <FormLabel>Agenda Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter event title" {...field} />
+                          <Input placeholder="Enter agenda title" {...field} />
                         </FormControl>
-                        <FormDescription>
-                          The name of your event as it will appear on the
-                          agenda.
-                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -211,10 +207,10 @@ const AddAgenda = () => {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Event Description</FormLabel>
+                        <FormLabel>Agenda Description</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Enter a detailed description of the event"
+                            placeholder="Enter a detailed description of the agenda"
                             className="min-h-[120px]"
                             {...field}
                           />
@@ -236,7 +232,7 @@ const AddAgenda = () => {
                       Cancel
                     </Button>
                     <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? "Creating..." : "Create Event"}
+                      {isSubmitting ? "Creating..." : "Create Agenda"}
                     </Button>
                   </div>
                 </form>
