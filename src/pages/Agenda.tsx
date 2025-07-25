@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Calendar,
   Clock,
@@ -38,6 +39,7 @@ type GroupedAgendas = {
 };
 
 const Agenda = () => {
+  const { id } = useParams();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
@@ -50,7 +52,8 @@ const Agenda = () => {
       const { data, error } = await supabase
         .from("agendas")
         .select("*")
-        .order("date", { ascending: true });
+        .order("date", { ascending: true })
+        .eq("eventId", id);
 
       if (error) console.error("Error fetching agendas:", error);
       else setAgendas(data);
@@ -119,7 +122,10 @@ const Agenda = () => {
             title="Agenda"
             description="Real-time monitoring of event's schedule"
           >
-            <Button className="gap-2" onClick={() => navigate("/add-agenda")}>
+            <Button
+              className="gap-2"
+              onClick={() => navigate(`/event/${id}/agendas/add`)}
+            >
               {" "}
               <Plus className="h-4 w-4" /> Add Agenda{" "}
             </Button>
