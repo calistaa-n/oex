@@ -1,7 +1,7 @@
 import * as z from "zod";
-import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ArrowLeft, CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -45,6 +45,7 @@ const eventFormSchema = z.object({
 type EventFormValues = z.infer<typeof eventFormSchema>;
 
 const AddAgenda = () => {
+  const { id } = useParams();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -90,7 +91,7 @@ const AddAgenda = () => {
       });
 
       // Navigate back to agenda page
-      navigate("/agenda");
+      navigate(`/event/${id}/agendas`);
     } catch (error) {
       console.error("Error submitting event:", error);
       toast({
@@ -120,7 +121,7 @@ const AddAgenda = () => {
             <Button
               variant="outline"
               className="gap-2"
-              onClick={() => navigate("/agenda")}
+              onClick={() => navigate(`/event/${id}/agendas`)}
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -229,7 +230,7 @@ const AddAgenda = () => {
                   <div className="flex justify-end space-x-4">
                     <Button
                       variant="outline"
-                      onClick={() => navigate("/agenda")}
+                      onClick={() => navigate(`/event/${id}/agendas`)}
                       type="button"
                     >
                       Cancel
