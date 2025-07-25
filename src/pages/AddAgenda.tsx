@@ -11,13 +11,6 @@ import supabase from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -36,11 +29,9 @@ import DashboardHeader from "@/components/DashboardHeader";
 // Form validation schema
 const eventFormSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters." }),
-  type: z.string().min(1, { message: "Event type is required." }),
   date: z.string().min(1, { message: "Date is required." }),
   startTime: z.string().min(1, { message: "Start time is required." }),
   endTime: z.string().min(1, { message: "End time is required." }),
-  location: z.string().min(1, { message: "Location is required." }),
   capacity: z.coerce
     .number()
     .int()
@@ -53,25 +44,6 @@ const eventFormSchema = z.object({
 
 type EventFormValues = z.infer<typeof eventFormSchema>;
 
-// Mock data for dropdown options
-const roomLocations = [
-  { id: "room-a", name: "Room A" },
-  { id: "room-b", name: "Room B" },
-  { id: "room-c", name: "Room C" },
-  { id: "room-d", name: "Room D" },
-  { id: "room-e", name: "Room E" },
-  { id: "main-hall", name: "Main Hall" },
-  { id: "dining-area", name: "Dining Area" },
-];
-
-const eventTypes = [
-  { id: "keynote", name: "Keynote" },
-  { id: "break", name: "Break" },
-  { id: "social", name: "Social Event" },
-  { id: "registration", name: "Registration" },
-  { id: "feedback", name: "Feedback Session" },
-];
-
 const AddAgenda = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -79,31 +51,19 @@ const AddAgenda = () => {
   const queryClient = useQueryClient();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showCapacity, setShowCapacity] = useState(false);
 
   // Initialize form with validation
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
       title: "",
-      type: "",
       date: "",
       startTime: "",
       endTime: "",
-      location: "",
       capacity: 100,
       description: "",
     },
   });
-
-  // Watch the event type to conditionally display capacity field
-  const eventType = form.watch("type");
-
-  // Update capacity visibility when event type changes
-  React.useEffect(() => {
-    // Only show capacity for feedback sessions and some social events
-    setShowCapacity(["feedback", "social"].includes(eventType));
-  }, [eventType]);
 
   // Form submission handler
   const onSubmit = async (values: EventFormValues) => {
@@ -115,7 +75,6 @@ const AddAgenda = () => {
           date: values.date,
           start_time: values.startTime,
           end_time: values.endTime,
-          location: values.location,
           description: values.description,
         },
       ]);
@@ -193,34 +152,6 @@ const AddAgenda = () => {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Event Type</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select event type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {eventTypes.map((type) => (
-                                <SelectItem key={type.id} value={type.id}>
-                                  {type.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField
                       control={form.control}
@@ -272,66 +203,6 @@ const AddAgenda = () => {
                         </FormItem>
                       )}
                     />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="location"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Location</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="pl-10">
-                                  <SelectValue placeholder="Select a location" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {roomLocations.map((room) => (
-                                    <SelectItem key={room.id} value={room.name}>
-                                      {room.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {showCapacity && (
-                      <FormField
-                        control={form.control}
-                        name="capacity"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Capacity (optional)</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                <Input
-                                  type="number"
-                                  placeholder="Maximum number of attendees"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormDescription>
-                              Leave blank if there's no specific limit.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
                   </div>
 
                   <FormField
