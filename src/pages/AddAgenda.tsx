@@ -37,9 +37,7 @@ const agendaFormSchema = z.object({
     .int()
     .min(1, { message: "Capacity must be at least 1." })
     .optional(),
-  description: z
-    .string()
-    .min(10, { message: "Description must be at least 10 characters." }),
+  description: z.string(),
 });
 
 type AgendaFormValues = z.infer<typeof agendaFormSchema>;
