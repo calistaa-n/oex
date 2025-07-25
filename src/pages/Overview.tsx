@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase";
 import {
@@ -154,7 +155,9 @@ export default function Overview() {
         <div>
           {/* Render events list here */}
           {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <Link key={event.id} to={`/event/${event.id}/home`}>
+              <EventCard event={event} />
+            </Link>
           ))}
         </div>
       )}
