@@ -27,24 +27,39 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/home" element={<Index />} />
-
+          {/* Auth Routes */}
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           {/* <Route path="/signup" element={<SignUp />} /> */}
+
+          {/* Events */}
           <Route path="/event" element={<Overview />} />
-          <Route path="/create-event" element={<CreateEvent />} />
-          <Route path="/workshop-management" element={<WorkshopManagement />} />
-          <Route path="/room-monitoring" element={<RoomMonitoring />} />
-          <Route path="/reminder" element={<Reminder />} />
-          <Route path="/agenda" element={<Agenda />} />
+          <Route path="/event/create" element={<CreateEvent />} />
+
+          {/* Event Dashboard */}
+          <Route path="/event/:id/home" element={<Index />} />
+
+          {/* Agenda */}
+          <Route path="/event/:id/agendas" element={<Agenda />} />
+          <Route path="/event/:id/agendas/add" element={<AddAgenda />} />
+
+          {/* Workshop */}
+          <Route path="/event/:id/workshops" element={<WorkshopManagement />} />
+          <Route path="/event/:id/workshops/add" element={<AddWorkshop />} />
+
+          {/* Room Monitoring */}
+          <Route path="/event/:id/rooms" element={<RoomMonitoring />} />
+
+          {/* Reminders */}
+          <Route path="/event/:id/reminders" element={<Reminder />} />
+
+          {/* Merchandise */}
           <Route
-            path="/merchandise-management"
+            path="/event/:id/merchandise"
             element={<MerchandiseManagement />}
           />
-          <Route path="/add-workshop" element={<AddWorkshop />} />
-          <Route path="/add-agenda" element={<AddAgenda />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+          {/* Catch All */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
