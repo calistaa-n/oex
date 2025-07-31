@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase";
 import {
@@ -16,7 +17,7 @@ type Event = {
   id: string;
   name: string;
   date: string;
-  coverImageUrl: string;
+  coverUrl: string;
   isRecentlyAdded?: boolean;
   status: "Not Started" | "Ongoing" | "Finished";
 };
@@ -26,7 +27,7 @@ function EventCard({ event }: { event: Event }) {
     <div className="flex items-center justify-between p-4 border rounded-2xl shadow hover:bg-gray-50 transition mb-4">
       <div className="flex items-center space-x-4">
         <img
-          src={event.coverImageUrl || "/placeholder.png"}
+          src={event.coverUrl || "/placeholder.png"}
           alt={event.name}
           className="h-12 w-12 rounded object-cover border"
         />
@@ -154,7 +155,9 @@ export default function Overview() {
         <div>
           {/* Render events list here */}
           {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <Link key={event.id} to={`/event/${event.id}/home`}>
+              <EventCard event={event} />
+            </Link>
           ))}
         </div>
       )}

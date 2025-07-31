@@ -1,19 +1,19 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { 
-  LayoutDashboard, 
-  Users, 
+import { useParams } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Users,
   MonitorSmartphone,
-  Bell, 
-  CalendarDays, 
+  Bell,
+  CalendarDays,
   ShoppingBag,
   Menu,
-  X
+  X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
 
 type NavItem = {
   title: string;
@@ -22,51 +22,52 @@ type NavItem = {
   color: string;
 };
 
-const navItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/home",
-    icon: LayoutDashboard,
-    color: "text-indigo-500"
-  },
-  {
-    title: "Workshop Management",
-    href: "/workshop-management",
-    icon: Users,
-    color: "text-blue-500"
-  },
-  {
-    title: "Room Monitoring",
-    href: "/room-monitoring",
-    icon: MonitorSmartphone,
-    color: "text-cyan-500"
-  },
-  {
-    title: "Reminder",
-    href: "/reminder",
-    icon: Bell,
-    color: "text-amber-500"
-  },
-  {
-    title: "Agenda",
-    href: "/agenda",
-    icon: CalendarDays,
-    color: "text-emerald-500"
-  },
-  {
-    title: "Merchandise",
-    href: "/merchandise-management",
-    icon: ShoppingBag,
-    color: "text-rose-500"
-  },
-];
-
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const location = useLocation();
-  
+
   const toggleSidebar = () => setIsOpen(!isOpen);
+
+  const { id } = useParams<{ id: string }>();
+  const navItems: NavItem[] = [
+    {
+      title: "Dashboard",
+      href: `/event/${id}/home`,
+      icon: LayoutDashboard,
+      color: "text-indigo-500",
+    },
+    {
+      title: "Workshop Management",
+      href: `/event/${id}/workshops`,
+      icon: Users,
+      color: "text-blue-500",
+    },
+    {
+      title: "Room Monitoring",
+      href: `/event/${id}/rooms`,
+      icon: MonitorSmartphone,
+      color: "text-cyan-500",
+    },
+    {
+      title: "Reminder",
+      href: `/event/${id}/reminders`,
+      icon: Bell,
+      color: "text-amber-500",
+    },
+    {
+      title: "Agenda",
+      href: `/event/${id}/agendas`,
+      icon: CalendarDays,
+      color: "text-emerald-500",
+    },
+    {
+      title: "Merchandise",
+      href: `/event/${id}/merchandise`,
+      icon: ShoppingBag,
+      color: "text-rose-500",
+    },
+  ];
 
   return (
     <>
@@ -86,19 +87,27 @@ export default function Sidebar() {
       <div
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transition-transform duration-300 ease-in-out transform",
-          isMobile ? (isOpen ? "translate-x-0" : "-translate-x-full") : "translate-x-0"
+          isMobile
+            ? isOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+            : "translate-x-0"
         )}
       >
         <div className="flex flex-col h-full">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">OEX</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Workshop Management</p>
+            <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+              OEX
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Workshop Management
+            </p>
           </div>
-          
+
           <nav className="flex-1 px-3 space-y-1">
             {navItems.map((item) => {
               const isActive = location.pathname === item.href;
-              
+
               return (
                 <Link
                   key={item.href}
@@ -106,22 +115,24 @@ export default function Sidebar() {
                   onClick={isMobile ? toggleSidebar : undefined}
                   className={cn(
                     "flex items-center px-3 py-3 rounded-md transition-all group",
-                    isActive 
-                      ? "bg-indigo-50 dark:bg-indigo-950/50" 
+                    isActive
+                      ? "bg-indigo-50 dark:bg-indigo-950/50"
                       : "hover:bg-gray-100 dark:hover:bg-gray-800"
                   )}
                 >
-                  <item.icon 
+                  <item.icon
                     className={cn(
                       "mr-3 h-5 w-5 flex-shrink-0",
-                      isActive ? item.color : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
-                    )} 
+                      isActive
+                        ? item.color
+                        : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                    )}
                   />
-                  <span 
+                  <span
                     className={cn(
                       "font-medium",
-                      isActive 
-                        ? "text-indigo-600 dark:text-indigo-400" 
+                      isActive
+                        ? "text-indigo-600 dark:text-indigo-400"
                         : "text-gray-700 dark:text-gray-200"
                     )}
                   >
@@ -131,7 +142,7 @@ export default function Sidebar() {
               );
             })}
           </nav>
-          
+
           <div className="p-4 mt-auto">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               <p>SaranaTech © 2025</p>
@@ -140,10 +151,10 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      
+
       {/* Overlay */}
       {isMobile && isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30"
           onClick={toggleSidebar}
         />
