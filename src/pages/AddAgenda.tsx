@@ -178,7 +178,11 @@ const AddAgenda = () => {
                           <FormControl>
                             <div className="relative">
                               <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Input type="time" className="pl-10" {...field} />
+                              <Input
+                                type="time"
+                                className="pl-10 hide-date-time-icon"
+                                {...field}
+                              />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -195,7 +199,11 @@ const AddAgenda = () => {
                           <FormControl>
                             <div className="relative">
                               <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Input type="time" className="pl-10" {...field} />
+                              <Input
+                                type="time"
+                                className="pl-10  hide-date-time-icon"
+                                {...field}
+                              />
                             </div>
                           </FormControl>
                           <FormMessage />
