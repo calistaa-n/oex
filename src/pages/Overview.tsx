@@ -98,7 +98,7 @@ export default function Overview() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">All Event</h1>
         <Button
-          onClick={() => navigate("/create-event")}
+          onClick={() => navigate("/event/create")}
           className="bg-[#4285F4] hover:bg-[#2469DB]"
         >
           + Add New Event
