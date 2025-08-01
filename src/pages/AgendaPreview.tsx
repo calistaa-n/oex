@@ -61,12 +61,14 @@ const AgendaPreview = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end mt-2 md:mt-0">
-                    <MapPin className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm text-left text-gray-500">
-                      {agenda.room}
-                    </span>
-                  </div>
+                  {agenda.room && (
+                    <div className="flex items-center justify-end mt-2 md:mt-0">
+                      <MapPin className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm text-left text-gray-500">
+                        {agenda.room}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
