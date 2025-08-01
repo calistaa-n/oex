@@ -14,6 +14,7 @@ import MerchandiseManagement from "./pages/MerchandiseManagement";
 import Login from "./pages/Login";
 import Index from "./pages/Index";
 import CreateEvent from "./pages/CreateEvent";
+import AgendaPreview from "./pages/AgendaPreview";
 import Agenda from "./pages/Agenda";
 import AddWorkshop from "./pages/AddWorkshop";
 import AddAgenda from "./pages/AddAgenda";
@@ -61,6 +62,8 @@ const App = () => (
 
           {/* Catch All */}
           <Route path="*" element={<NotFound />} />
+
+          <Route path="/event/:id/preview" element={<AgendaPreview />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
