@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { ArrowLeft, CalendarDays, Clock } from "lucide-react";
+import { ArrowLeft, Clock } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ import DashboardHeader from "@/components/DashboardHeader";
 // Form validation schema
 const agendaFormSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters." }),
-  date: z.string().min(1, { message: "Date is required." }),
+  room: z.string(),
   startTime: z.string().min(1, { message: "Start time is required." }),
   endTime: z.string().min(1, { message: "End time is required." }),
   capacity: z.coerce
@@ -58,7 +58,7 @@ const AddAgenda = () => {
     resolver: zodResolver(agendaFormSchema),
     defaultValues: {
       title: "",
-      date: "",
+      room: "",
       startTime: "",
       endTime: "",
       capacity: 100,
@@ -73,7 +73,7 @@ const AddAgenda = () => {
       const { error } = await supabase.from("agendas").insert([
         {
           title: values.title,
-          date: values.date,
+          room: values.room,
           start_time: values.startTime,
           end_time: values.endTime,
           description: values.description,
@@ -153,15 +153,16 @@ const AddAgenda = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField
                       control={form.control}
-                      name="date"
+                      name="room"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Date</FormLabel>
+                          <FormLabel>Room Location</FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <CalendarDays className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Input type="date" className="pl-10" {...field} />
-                            </div>
+                            <Input
+                              type="room"
+                              placeholder="Enter room name or number"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
