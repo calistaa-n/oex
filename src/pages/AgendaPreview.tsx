@@ -64,13 +64,32 @@ const AgendaPreview = () => {
               className={cn(
                 "rounded-xl shadow-sm mb-6",
                 isAgendaOngoing(agenda.start_time, agenda.end_time) &&
-                  "bg-indigo-100"
+                  "border-indigo-300"
               )}
             >
               <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-2 md:gap-4">
-                  <div className="space-y-3 max-w-md">
-                    <h3 className="text-lg">{agenda.title}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-1 md:gap-4">
+                  <div className="space-y-2 max-w-md">
+                    <div className="flex gap-x-3">
+                      {isAgendaOngoing(agenda.start_time, agenda.end_time) && (
+                        <div className="flex items-center gap-2 border border-red-500 rounded-full px-2 py-1 bg-red-100">
+                          <div className="flex relative size-3">
+                            <span className="absolute h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                          </div>
+                          <span className="text-sm text-red-600">Live</span>
+                        </div>
+                      )}
+                      <h3
+                        className={cn(
+                          "text-lg",
+                          isAgendaOngoing(agenda.start_time, agenda.end_time) &&
+                            "font-medium"
+                        )}
+                      >
+                        {agenda.title}
+                      </h3>
+                    </div>
                     <p className="text-gray-600 dark:text-gray-400">
                       {agenda.description}
                     </p>
