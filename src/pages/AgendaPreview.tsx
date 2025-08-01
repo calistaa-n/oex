@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Clock, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
 import supabase from "@/lib/supabase";
 import { Card, CardContent } from "@/components/ui/card";
 import DashboardHeader from "@/components/DashboardHeader";
@@ -34,6 +35,20 @@ const AgendaPreview = () => {
     fetchAgendas();
   }, []);
 
+  const isAgendaOngoing = (start: string, end: string) => {
+    const now = new Date();
+    const [startHour, startMinute] = start.split(":").map(Number);
+    const [endHour, endMinute] = end.split(":").map(Number);
+
+    const startTime = new Date(now);
+    startTime.setHours(startHour, startMinute, 0, 0);
+
+    const endTime = new Date(now);
+    endTime.setHours(endHour, endMinute, 0, 0);
+
+    return now >= startTime && now <= endTime;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex justify-center">
       <div className="w-full max-w-3xl transition-all duration-300">
@@ -44,17 +59,36 @@ const AgendaPreview = () => {
           />
 
           {agendas.map((agenda) => (
-            <Card key={agenda.id} className="overflow-hidden mb-6">
+            <Card
+              key={agenda.id}
+              className={cn(
+                "rounded-xl shadow-sm mb-6",
+                isAgendaOngoing(agenda.start_time, agenda.end_time) &&
+                  "bg-indigo-100"
+              )}
+            >
               <CardContent className="p-6">
-                <div className="grid md:grid-cols-2 items-start md:items-center gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-2 md:gap-4">
                   <div className="space-y-3 max-w-md">
-                    <h3 className="text-l font-medium">{agenda.title}</h3>
+                    <h3 className="text-lg">{agenda.title}</h3>
                     <p className="text-gray-600 dark:text-gray-400">
                       {agenda.description}
                     </p>
                     <div className="flex items-center">
-                      <Clock className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-500">
+                      <Clock
+                        className={cn(
+                          "h-4 w-4 text-gray-500 mr-1",
+                          isAgendaOngoing(agenda.start_time, agenda.end_time) &&
+                            "text-indigo-600"
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          "text-md text-gray-500",
+                          isAgendaOngoing(agenda.start_time, agenda.end_time) &&
+                            " text-black"
+                        )}
+                      >
                         {agenda.start_time?.slice(0, 5)} -{" "}
                         {agenda.end_time?.slice(0, 5)}
                       </span>
@@ -62,9 +96,21 @@ const AgendaPreview = () => {
                   </div>
 
                   {agenda.room && (
-                    <div className="flex items-center justify-end mt-2 md:mt-0">
-                      <MapPin className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-left text-gray-500">
+                    <div className="flex items-center md:justify-end mt-2 md:mt-0">
+                      <MapPin
+                        className={cn(
+                          "h-4 w-4 text-gray-500 mr-1",
+                          isAgendaOngoing(agenda.start_time, agenda.end_time) &&
+                            "text-indigo-600"
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          "text-md text-left text-gray-500",
+                          isAgendaOngoing(agenda.start_time, agenda.end_time) &&
+                            " text-black"
+                        )}
+                      >
                         {agenda.room}
                       </span>
                     </div>
